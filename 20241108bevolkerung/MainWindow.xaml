@@ -1,0 +1,42 @@
+﻿<Window x:Class="_20241108bevolkerung.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20241108bevolkerung"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="750" Width="1300">
+    <Grid>
+        <ComboBox x:Name="valasztoCombobox" Margin="37,57,1147,636" SelectionChanged="ComboBox_SelectionChanged"></ComboBox>
+        <Label Margin="183,57,757,596" Content="feladat egy mondatos megoldása:" FontSize="16" FontWeight="Bold"/>
+        <Label x:Name="MegoldasMondatos" Margin="497,39,246,636" Content="" FontSize="16"/>
+        <DataGrid Height="310" Width="auto" AutoGenerateColumns="False" x:Name="MegoldasTeljes">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Nem" Binding="{Binding Nem}"/>
+                <DataGridTextColumn Header="SzuletesiEv" Binding="{Binding SzuletesiEv}"/>
+                <DataGridTextColumn Header="Suly" Binding="{Binding Suly}"/>
+                <DataGridTextColumn Header="Magassag" Binding="{Binding Magassag}"/>
+                <DataGridTextColumn Header="Dohanyzik" Binding="{Binding Dohanyzik}"/>
+                <DataGridTextColumn Header="Nemzetiseg" Binding="{Binding Nemzetiseg}"/>
+                <DataGridTextColumn Header="Nepcsoport" Binding="{Binding Nepcsoport}"/>
+                <DataGridTextColumn Header="Tartomany" Binding="{Binding Tartomany}"/>
+                <DataGridTextColumn Header="Nettojovedelem" Binding="{Binding NettoJovedelem}"/>
+                <DataGridTextColumn Header="Iskolaivegzettseg" Binding="{Binding IskolaiVegzettseg}"/>
+                <DataGridTextColumn Header="PolitikaiNezet" Binding="{Binding PolitikaiNezet}"/>
+                <DataGridTextColumn Header="AktivSzavazo" Binding="{Binding AktivSzavazo}"/>
+                <DataGridTextColumn Header="SorFogyasztasEvente" Binding="{Binding SorFogyasztasEvente}"/>
+                <DataGridTextColumn Header="KrumpliFogyasztasEvente" Binding="{Binding KrumpliFogyasztasEvente}"/>
+                <DataGridTextColumn Header="HaviNetto" Binding="{Binding HaviNetto}"/>
+                <DataGridTextColumn Header="Eletkor" Binding="{Binding Eletkor}"/>
+
+            </DataGrid.Columns>
+
+
+
+
+
+        </DataGrid>
+        <ListBox x:Name="MegoldasLista" HorizontalAlignment="Left" Height="184" Margin="0,522,0,0" VerticalAlignment="Top" Width="672"/>
+    </Grid>
+</Window>
