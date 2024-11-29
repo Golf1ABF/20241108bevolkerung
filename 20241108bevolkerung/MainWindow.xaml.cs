@@ -21,7 +21,6 @@ namespace _20241108bevolkerung
         public MainWindow()
         {
             InitializeComponent();
-            //2.feladat
             var sr = new StreamReader(path: @"..\..\..\src\bevölkerung.txt", encoding: Encoding.UTF8);
             _ = sr.ReadLine();
             lakossag = new List<Allampolgar>();
@@ -236,21 +235,155 @@ namespace _20241108bevolkerung
             vezerlokTorlese();
             double hanySzavazo = lakossag.Count(x => x.AktivSzavazo);
             double osszesAllampolgar = lakossag.Count();
-            MegoldasLista.Items.Add($"Az állampolgárok {Math.Round((hanySzavazo / osszesAllampolgar) * 100, 2)} százaléka aktív szavazó");
+            MegoldasLista.Items.Add($"Az állampolgárok {(hanySzavazo / osszesAllampolgar) * 100:F2} százaléka aktív szavazó");
         }
 
         private void Feladat16()
         {
             vezerlokTorlese();
+            var csoportositottAdatok = lakossag
+            .Where(allampolgar => allampolgar.AktivSzavazo)
+            .GroupBy(allampolgar => allampolgar.Tartomany)
+            .OrderBy(group => group.Key);
 
+            foreach (var csoport in csoportositottAdatok)
+            {
+                MegoldasLista.Items.Add($"Tartomány: {csoport.Key}");
+
+                foreach (var allampolgar in csoport)
+                {
+                    MegoldasLista.Items.Add(allampolgar.ToString());
+                }
+            }
         }
 
         private void Feladat17()
         {
             vezerlokTorlese();
+            MegoldasLista.Items.Add(lakossag.Average(x => x.Eletkor));
         }
 
         private void Feladat18()
+        {
+            vezerlokTorlese();
+            var csoportositas = lakossag
+            .GroupBy(allampolgar => allampolgar.Tartomany)
+            .Select(group => new
+            {
+                Tartomany = group.Key,
+                AtlagJovedelem = group.Average(allampolgar => allampolgar.NettoJovedelem),
+                LakossagSzama = group.Count()
+            })
+            .ToList();
+
+            var legmagasabbAtlag = csoportositas.Max(csoport => csoport.AtlagJovedelem);
+
+            var legjobbak = csoportositas
+                .Where(csoport => csoport.AtlagJovedelem == legmagasabbAtlag)
+                .OrderByDescending(csoport => csoport.LakossagSzama)
+                .First();
+
+            MegoldasLista.Items.Add($"Tartomány: {legjobbak.Tartomany}");
+            MegoldasLista.Items.Add($"Átlagos éves nettó jövedelem: {legjobbak.AtlagJovedelem:F2} Ft");
+            MegoldasLista.Items.Add($"Lakosság száma: {legjobbak.LakossagSzama}");
+
+        }
+
+        private void Feladat19()
+        {
+            vezerlokTorlese();
+            double atlagSuly = lakossag.Average(allampolgar => allampolgar.Suly);
+
+            var rendezettSulyok = lakossag
+                .Select(allampolgar => allampolgar.Suly)
+                .OrderBy(suly => suly)
+                .ToList();
+
+            double medianSuly;
+            int n = rendezettSulyok.Count;
+            if (n % 2 == 1)
+            {
+                medianSuly = rendezettSulyok[n / 2];
+            }
+            else
+            {
+                medianSuly = (rendezettSulyok[(n / 2) - 1] + rendezettSulyok[n / 2]) / 2.0;
+            }
+
+            MegoldasLista.Items.Add($"Átlagos súly: {atlagSuly:F2} kg");
+            MegoldasLista.Items.Add($"Medián súly: {medianSuly:F2} kg");
+        }
+
+        private void Feladat20()
+        {
+            vezerlokTorlese();
+            var nemSzavazoSorFogyasztas = lakossag
+                .Where(x => x.AktivSzavazo == false)
+                .Average(x => x.SorFogyasztasEvente);
+            var SzavazoSorFogyasztas = lakossag
+                .Where(x => x.AktivSzavazo == true)
+                .Average(x => x.SorFogyasztasEvente);
+            var dontes = nemSzavazoSorFogyasztas > SzavazoSorFogyasztas ? "Nem szavazó" : "Szavazó";
+
+            MegoldasLista.Items.Add($"Nem szavazó átlag sörfogyasztás: {nemSzavazoSorFogyasztas}, szavazó sörfogyasztás: {SzavazoSorFogyasztas}, tehát {dontes} fogyaszt több sört");
+
+        }
+
+        private void Feladat21()
+        {
+            vezerlokTorlese();
+            var ferfiMagassag = lakossag
+                .Where(x => x.Nem == "férfi")
+                .Average(x => x.Magassag);
+
+            var noMagassag = lakossag
+                .Where(x => x.Nem == "nő")
+                .Average(x => x.Magassag);
+
+            MegoldasLista.Items.Add($"Átlagos női magasság: {noMagassag:F0}, átlagos férfi magasság: {ferfiMagassag:F0}");
+        }
+
+        private void Feladat22()
+        {
+            vezerlokTorlese();
+            var nepcsoportStatisztika = lakossag
+                .GroupBy(x => x.Nepcsoport)
+                .Where(group => !string.IsNullOrEmpty(group.Key))
+                .Select(group => new
+                {
+                    Nepcsoport = group.Key,
+                    TagokSzama = group.Count(),
+                    AtlagEletkor = group.Average(x => x.Eletkor)
+                })
+                .ToList();
+            var nepcsoportLegtobb = nepcsoportStatisztika
+                .MaxBy(x => x.TagokSzama);
+            var legjobb = nepcsoportStatisztika
+                .Where(x => x.TagokSzama == nepcsoportLegtobb.TagokSzama)
+                .MaxBy(x => x.AtlagEletkor);
+            MegoldasLista.Items.Add($"{legjobb.Nepcsoport} népcsoportba tartoznak a legtöbben, {legjobb.TagokSzama} fővel.");
+            MegoldasLista.Items.Add($"Az átlagos életkor: {legjobb.AtlagEletkor:F2} év.");
+        }
+
+        private void Feladat23()
+        {
+            vezerlokTorlese();
+            var nemDohanyzoBevetel = lakossag.Where(x => x.Dohanyzik == false).Average(x => x.NettoJovedelem);
+            var dohanyzoBevetel = lakossag.Where(x => x.Dohanyzik == true).Average(x => x.NettoJovedelem);
+            MegoldasMondatos.Content = $"Nemdohányzó jövedelem: {nemDohanyzoBevetel:F0}, dohányzó jövedelem: {dohanyzoBevetel:F0}"; 
+        }
+
+        private void Feladat24()
+        {
+            vezerlokTorlese();
+        }
+
+        private void Feladat25()
+        {
+            vezerlokTorlese();
+        }
+
+        private void Feladat26()
         {
             vezerlokTorlese();
         }
