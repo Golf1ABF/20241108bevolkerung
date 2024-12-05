@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="750" Width="1300">
     <Grid>
-        <ComboBox x:Name="valasztoCombobox" Margin="37,57,1147,636" SelectionChanged="ComboBox_SelectionChanged"></ComboBox>
+        <ComboBox x:Name="valasztoCombobox" Margin="37,57,1138,624" SelectionChanged="ComboBox_SelectionChanged"></ComboBox>
         <Label Margin="183,57,757,596" Content="feladat egy mondatos megoldása:" FontSize="16" FontWeight="Bold"/>
         <Label x:Name="MegoldasMondatos" Margin="497,39,246,636" Content="" FontSize="16"/>
         <DataGrid Height="310" Width="auto" AutoGenerateColumns="False" x:Name="MegoldasTeljes">
